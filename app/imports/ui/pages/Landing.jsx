@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stuffs } from '/imports/api/stuff/Stuff';
 import { Grid, Header, Segment } from 'semantic-ui-react';
-import { AutoForm, ErrorsField, SelectField, SubmitField, TextField } from 'uniforms-semantic';
+import { AutoForm, ErrorsField, SubmitField, SelectField, TextField, LongTextField } from 'uniforms-semantic';
 import swal from 'sweetalert';
 // import { Meteor } from 'meteor/meteor';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
@@ -9,12 +9,10 @@ import SimpleSchema from 'simpl-schema';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
-  name: String,
-  condition: {
-    type: String,
-    allowedValues: ['excellent', 'good', 'fair', 'poor'],
-    defaultValue: 'good',
-  },
+  title: String,
+  description: String,
+  location: String,
+  url: String,
 });
 
 /** A simple static component to render some text for the landing page. */
@@ -22,9 +20,9 @@ class Landing extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { name, condition } = data;
+    const { title, description, location, url } = data;
     // const owner = Meteor.user().username;
-    Stuffs.insert({ name, condition },
+    Stuffs.insert({ title, description, location, url },
         (error) => {
           if (error) {
             swal('Error', error.message, 'error');
@@ -45,9 +43,11 @@ class Landing extends React.Component {
             <Header as="h2" textAlign="center">Create New Event</Header>
             <AutoForm ref={ref => { fRef = ref; }} schema={formSchema} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
-                <TextField name='name'/>
-                <SelectField name='condition'/>
-                <SubmitField value='Submit'/>
+                <TextField name='title'/>
+                <LongTextField name='description'/>
+                <TextField name='location'/>
+                <TextField name='url'/>
+                <SubmitField value='Submit' name='Create'/>
                 <ErrorsField/>
               </Segment>
             </AutoForm>
