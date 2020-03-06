@@ -10,7 +10,8 @@ const StuffSchema = new SimpleSchema({
   title: String,
   description: String,
   location: String,
-  url: String,
+  startDate: String,
+  endDate: String,
 }, { tracker: Tracker });
 
 /** Attach this schema to the collection. */
