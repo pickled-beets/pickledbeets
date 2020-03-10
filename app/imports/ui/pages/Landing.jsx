@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stuffs } from '/imports/api/stuff/Stuff';
+import { Stuffs, add } from '/imports/api/stuff/Stuff';
 import { Grid, Header, Segment } from 'semantic-ui-react';
 import { AutoForm, ErrorsField, SubmitField, TextField, LongTextField } from 'uniforms-semantic';
 import swal from 'sweetalert';
@@ -21,17 +21,18 @@ class Landing extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    const { title, description, location, startDate, endDate } = data;
-    // const owner = Meteor.user().username;
-    Stuffs.insert({ title, description, location, startDate, endDate },
-        (error) => {
-          if (error) {
-            swal('Error', error.message, 'error');
-          } else {
-            swal('Success', 'Item added successfully', 'success');
-            formRef.reset();
-          }
-        });
+    // const { title, description, location, startDate, endDate } = data;
+    // // const owner = Meteor.user().username;
+    // Stuffs.insert({ title, description, location, startDate, endDate },
+    //     (error) => {
+    //       if (error) {
+    //         swal('Error', error.message, 'error');
+    //       } else {
+    //         swal('Success', 'Item added successfully', 'success');
+    //         formRef.reset();
+    //       }
+    //     });
+    add();
   }
 
   render() {
