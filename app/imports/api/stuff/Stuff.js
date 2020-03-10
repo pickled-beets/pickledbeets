@@ -3,6 +3,7 @@ import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 import ICAL from 'ical.js'
 import swal from 'sweetalert'
+import fs from 'file-saver'
 
 /** Define a Mongo collection to hold the data. */
 const Stuffs = new Mongo.Collection('Stuffs');
@@ -36,8 +37,13 @@ let add = function () {
 
   var jcalData = ICAL.parse(iCalendarData);
   var vcalendar = new ICAL.Component(jcalData);
-  // fs.writeFileSync('event.ics', vcalendar);
   
+  download(vcalendar);
+}
+
+let download = function(file) {
+  const blob = new Blob([file], {type: 'text/plain:charset=utf-8'})
+  fs.saveAs(blob, 'event.ics');
 }
 
 /** Attach this schema to the collection. */
