@@ -33,20 +33,22 @@ const formSchema = new SimpleSchema({
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
 
-  state = {
-    startDate: new Date()
-  };
-
-  /** On clicking the date calendar, write the date */
-  // handleChange = date => {
-  //   this.setState({
-  //     startDate: date
-  //   });
-  // }
+  // state = {
+  //   startDate: new Date()
+  // };
 
   /** On submit, insert the data. */
   submit(data, formRef) {
+
+    let options = {
+      year: 'numeric', month: 'numeric', day: 'numeric',
+      hour: 'numeric', minute: 'numeric', second: 'numeric',
+      hour12: false, timeZone: 'America/Los_Angeles'
+    };
+    options.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    
     // swal(`${new Intl.DateTimeFormat('en-US').format(data.startDate)}`)
+    // swal(`${new Intl.DateTimeFormat('en-US', options).format(new Date())}`)
     add(data);
   }
 
@@ -63,14 +65,16 @@ class Landing extends React.Component {
                 <TextField name='title'/>
                 <LongTextField name='description'/>
                 <TextField name='location'/>
-                {/* <TextField name='startDate'/>
-                <DatePicker 
-                  selected={this.state.startDate}
-                  onChange={this.handleChange}
-                /> */}
-                {/* <AutoField name='startDate' value={this.state}/> */}
-                <DateField name='startDate'/>
-                <TextField name='endDate'/>
+                <Segment basic>
+                <Grid columns={2} relaxed='very'>
+                  <Grid.Column>
+                  <DateField name='startDate'/>          
+                  </Grid.Column>
+                  <Grid.Column>
+                  <DateField name='endDate'/>          
+                  </Grid.Column>
+                </Grid>
+                </Segment>
                 <SubmitField value='Submit' name='Create'/>
                 <ErrorsField/>
               </Segment>

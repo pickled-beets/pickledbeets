@@ -20,7 +20,7 @@ const StuffSchema = new SimpleSchema({
 let add = function (data) {
 
   const { title, description, location, startDate, endDate } = data;
-  swal(`${title} and ${description}`)
+  // swal(`${title} and ${description}`)
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
     `CALSCALE:GREGORIAN`,
@@ -31,7 +31,7 @@ let add = function (data) {
     `DTSTART;VALUE=DATE:20201129`,
     `DTEND;VALUE=DATE:20201130`,
     `GEO:40.0095;105.2669`,
-    `SUMMARY:Planning meeting`,
+    `SUMMARY:${title}`,
     `UID:4088E990AD89CB3DBB484909`,
     `END:VEVENT`,
     `END:VCALENDAR`
