@@ -13,7 +13,7 @@ const StuffSchema = new SimpleSchema({
   title: String,
   description: String,
   location: String,
-  startDate: Object,
+  startDate: String,
   endDate: String,
 }, { tracker: Tracker });
 

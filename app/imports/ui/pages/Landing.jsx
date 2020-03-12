@@ -7,6 +7,7 @@ import {
   SubmitField,
   TextField,
   LongTextField,
+  DateField,
   AutoField
 } from 'uniforms-semantic';
 import swal from 'sweetalert';
@@ -25,12 +26,7 @@ const formSchema = new SimpleSchema({
     optional: true
   },
   location: String,
-  startDate: {
-    type: Object,
-    uniforms: {
-      component: StartDateField
-    }
-  },
+  startDate: String,
   endDate: String,
 });
 
@@ -50,6 +46,7 @@ class Landing extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
+    swal(`${new Intl.DateTimeFormat('en-US').format(data.startDate)}`)
     add();
   }
 
@@ -71,7 +68,8 @@ class Landing extends React.Component {
                   selected={this.state.startDate}
                   onChange={this.handleChange}
                 /> */}
-                <AutoField name='startDate' value={this.state}/>
+                {/* <AutoField name='startDate' value={this.state}/> */}
+                <DateField name='startDate'/>
                 <TextField name='endDate'/>
                 <SubmitField value='Submit' name='Create'/>
                 <ErrorsField/>
