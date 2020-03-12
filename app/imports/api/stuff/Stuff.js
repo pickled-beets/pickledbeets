@@ -17,6 +17,16 @@ const StuffSchema = new SimpleSchema({
   endDate: String,
 }, { tracker: Tracker });
 
+// let state = {
+//   startDate: new Date()
+// };
+
+let handleChange = date => {
+  this.setState({
+    startDate: date
+  });
+};
+
 let add = function () {
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
@@ -50,4 +60,4 @@ let download = function(file) {
 Stuffs.attachSchema(StuffSchema);
 
 /** Make the collection and schema available to other code. */
-export { add, Stuffs, StuffSchema };
+export { add, handleChange, Stuffs, StuffSchema };

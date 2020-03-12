@@ -6,11 +6,16 @@ import swal from 'sweetalert';
 // import { Meteor } from 'meteor/meteor';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import SimpleSchema from 'simpl-schema';
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css';
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
   title: String,
-  description: String,
+  description: {
+    type: String,
+    optional: true
+  },
   location: String,
   startDate: String,
   endDate: String,
@@ -19,19 +24,31 @@ const formSchema = new SimpleSchema({
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
 
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {startDate: new Date()};
+  //   this.handleChange = this.handleChange.bind(this);
+  // }
+
+  state = {
+    startDate: new Date()
+  };
+  
+  handleChange(date) {
+    this.setState({
+        startDate: date
+    });
+  }
+
+  // handleChange = () => {
+  //   const [startDate, setStartDate] = useState(new Date());
+  //   return (
+  //     <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+  //   );
+  // };
+
   /** On submit, insert the data. */
   submit(data, formRef) {
-    // const { title, description, location, startDate, endDate } = data;
-    // // const owner = Meteor.user().username;
-    // Stuffs.insert({ title, description, location, startDate, endDate },
-    //     (error) => {
-    //       if (error) {
-    //         swal('Error', error.message, 'error');
-    //       } else {
-    //         swal('Success', 'Item added successfully', 'success');
-    //         formRef.reset();
-    //       }
-    //     });
     add();
   }
 
@@ -49,6 +66,11 @@ class Landing extends React.Component {
                 <LongTextField name='description'/>
                 <TextField name='location'/>
                 <TextField name='startDate'/>
+                <DatePicker 
+                  selected={this.state.date}
+                  onChange={this.dateChanged}
+                  
+                />
                 <TextField name='endDate'/>
                 <SubmitField value='Submit' name='Create'/>
                 <ErrorsField/>
