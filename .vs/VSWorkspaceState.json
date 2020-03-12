@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app",
+    "\\app\\client",
+    "\\app\\imports",
+    "\\app\\imports\\api",
+    "\\app\\imports\\api\\stuff",
+    "\\app\\imports\\ui",
+    "\\app\\imports\\ui\\layouts",
+    "\\app\\imports\\ui\\pages"
+  ],
+  "SelectedNode": "\\app\\imports\\api\\stuff\\Stuff.js",
+  "PreviewInSolutionExplorer": false
+}

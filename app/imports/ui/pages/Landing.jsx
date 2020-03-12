@@ -21,7 +21,6 @@ class Landing extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    // const { title, description, location, startDate, endDate } = data;
     // // const owner = Meteor.user().username;
     // Stuffs.insert({ title, description, location, startDate, endDate },
     //     (error) => {
@@ -32,7 +31,8 @@ class Landing extends React.Component {
     //         formRef.reset();
     //       }
     //     });
-    add();
+    const { title, description, location, startDate, endDate } = data;
+    add(data.description);
   }
 
   render() {

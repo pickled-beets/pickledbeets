@@ -17,7 +17,7 @@ const StuffSchema = new SimpleSchema({
   endDate: String,
 }, { tracker: Tracker });
 
-let add = function () {
+let add = function (summary) {
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
     `CALSCALE:GREGORIAN`,
@@ -28,7 +28,7 @@ let add = function () {
     `DTSTART;VALUE=DATE:20201129`,
     `DTEND;VALUE=DATE:20201130`,
     `GEO:40.0095;105.2669`,
-    `SUMMARY:Planning meeting`,
+    `SUMMARY:${summary}`, // PLanning meeting
     `UID:4088E990AD89CB3DBB484909`,
     `END:VEVENT`,
     `END:VCALENDAR`
