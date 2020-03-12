@@ -17,7 +17,10 @@ const StuffSchema = new SimpleSchema({
   endDate: String,
 }, { tracker: Tracker });
 
-let add = function () {
+let add = function (data) {
+
+  const { title, description, location, startDate, endDate } = data;
+  swal(`${title} and ${description}`)
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
     `CALSCALE:GREGORIAN`,

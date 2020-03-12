@@ -46,8 +46,8 @@ class Landing extends React.Component {
 
   /** On submit, insert the data. */
   submit(data, formRef) {
-    swal(`${new Intl.DateTimeFormat('en-US').format(data.startDate)}`)
-    add();
+    // swal(`${new Intl.DateTimeFormat('en-US').format(data.startDate)}`)
+    add(data);
   }
 
   render() {
