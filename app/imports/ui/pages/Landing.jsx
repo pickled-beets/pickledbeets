@@ -22,7 +22,6 @@ class Landing extends React.Component {
   /** On submit, insert the data. */
   submit(data, formRef) {
     const { title, description, location, startDate, endDate } = data;
-    // const owner = Meteor.user().username;
     Stuffs.insert({ title, description, location, startDate, endDate },
         (error) => {
           if (error) {
@@ -38,9 +37,7 @@ class Landing extends React.Component {
     let fRef = null;
     return (
         <Grid verticalAlign='middle' textAlign='center' container>
-
           <Grid.Column width={8}>
-
             <Header as="h2" textAlign="center">Create New Event</Header>
             <AutoForm ref={ref => { fRef = ref; }} schema={formSchema} onSubmit={data => this.submit(data, fRef)} >
               <Segment>
@@ -54,7 +51,6 @@ class Landing extends React.Component {
               </Segment>
             </AutoForm>
           </Grid.Column>
-
         </Grid>
     );
   }
