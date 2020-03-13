@@ -13,15 +13,15 @@ const StuffSchema = new SimpleSchema({
   title: String,
   description: String,
   location: String,
-  startDate: String,
-  endDate: String,
+  startDate: Date,
+  endDate: Date,
 }, { tracker: Tracker });
 
 /** Takes in the data submitted then parses an iCalendar file to be downloaded */
 let add = function (data) {
 
   const { title, description, location, startDate, endDate } = data;
-  swal(`${dateFormatter(startDate)}`)
+  // swal(`${dateFormatter(startDate)}`)
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
     `CALSCALE:GREGORIAN`,
@@ -30,8 +30,8 @@ let add = function (data) {
     `NAME:${title}`,
     `BEGIN:VEVENT`,
     `DTSTAMP:20200228T232000Z`,
-    `DTSTART;VALUE=DATE:20201129`,
-    `DTEND;VALUE=DATE:20201130`,
+    `DTSTART;VALUE=DATE:${dateFormatter(startDate)}`,
+    `DTEND;VALUE=DATE:${dateFormatter(endDate)}`,
     `GEO:40.0095;105.2669`,
     `SUMMARY:${title}`,
     `DESCRIPTION:${description}`,
@@ -53,16 +53,61 @@ let download = function(file) {
   fs.saveAs(blob, 'event.ics');
 }
 
-let dateFormatter = function (str) {
-  let options = {
-    year: 'numeric', month: 'numeric', day: 'numeric',
-    hour: 'numeric', minute: 'numeric', second: 'numeric',
-    hour12: true, timeZone: 'Pacific/Honolulu'
-  };
-  options.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+let dateFormatter = function (date) {
+  // let options = {
+  //   year: 'numeric', month: 'numeric', day: 'numeric',
+  //   hour: 'numeric', minute: 'numeric', second: 'numeric',
+  //   hour12: true, timeZone: 'Pacific/Honolulu'
+  // };
+  // options.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-  return new Intl.DateTimeFormat('en-US', options).format(new Date(str))
+  let d = date;
+  if (d.getHours > 13) {
+    d.setHours(d.getHours() - 14);
+  } else {
+    d.setHours(d.getHours() + 10);
+  }
+
+  // let formt = new Intl.DateTimeFormat('en-US', options).format(d)
+
+  // swal(`${regexFormat(d)}`)
+  return regexFormat(d);
+  
 }
+
+/** 
+ * Handles the regex formatting of dates
+ * taken from stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd
+ */
+let regexFormat = function (date) {
+  let d = new Date(date);
+  let month = '' + (d.getMonth() + 1);
+  let day = '' + d.getDate();
+  let year = d.getFullYear();
+  let hours = '' + d.getHours();
+  let minutes = '' + d.getMinutes();
+  let seconds = '' + d.getSeconds();
+
+  if (month.length < 2) {
+    month = '0' + month;
+  }
+  if (day.length < 2) {
+    day = '0' + day;
+  }
+  if (hours.length < 2) {
+    hours = '0' + hours;
+  }
+  if (minutes.length < 2) {
+    minutes = '0' + minutes;
+  }
+  if (seconds.length < 2) {
+    seconds = '0' + seconds;
+  }
+
+  return [year, month, day, 'T', hours, minutes, seconds].join('');
+
+}
+
 
 /** Attach this schema to the collection. */
 Stuffs.attachSchema(StuffSchema);

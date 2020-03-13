@@ -26,8 +26,8 @@ const formSchema = new SimpleSchema({
     optional: true
   },
   location: String,
-  startDate: String,
-  endDate: String,
+  startDate: Date,
+  endDate: Date,
 });
 
 /** A simple static component to render some text for the landing page. */
