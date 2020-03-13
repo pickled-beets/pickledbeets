@@ -17,15 +17,17 @@ const StuffSchema = new SimpleSchema({
   endDate: String,
 }, { tracker: Tracker });
 
+/** Takes in the data submitted then parses an iCalendar file to be downloaded */
 let add = function (data) {
 
   const { title, description, location, startDate, endDate } = data;
-  // swal(`${title} and ${description}`)
+  
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
     `CALSCALE:GREGORIAN`,
     `PRODID:-//University of Hawaii at Manoa.//ICS 414//EN`,
     `VERSION:2.0`,
+    `NAME:${title}`,
     `BEGIN:VEVENT`,
     `DTSTAMP:20200228T232000Z`,
     `DTSTART;VALUE=DATE:20201129`,
@@ -37,17 +39,19 @@ let add = function (data) {
     `END:VCALENDAR`
   ].join("\r\n");
 
-
   var jcalData = ICAL.parse(iCalendarData);
   var vcalendar = new ICAL.Component(jcalData);
   
   download(vcalendar);
 }
 
+/** Allows the file to be downloaded */
 let download = function(file) {
   const blob = new Blob([file], {type: 'text/plain:charset=utf-8'})
   fs.saveAs(blob, 'event.ics');
 }
+
+
 
 /** Attach this schema to the collection. */
 Stuffs.attachSchema(StuffSchema);

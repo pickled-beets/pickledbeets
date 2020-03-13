@@ -48,7 +48,7 @@ class Landing extends React.Component {
     options.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     
     // swal(`${new Intl.DateTimeFormat('en-US').format(data.startDate)}`)
-    // swal(`${new Intl.DateTimeFormat('en-US', options).format(new Date())}`)
+    swal(`${new Intl.DateTimeFormat('en-US', options).format(new Date())}`)
     add(data);
   }
 
@@ -66,7 +66,7 @@ class Landing extends React.Component {
                 <LongTextField name='description'/>
                 <TextField name='location'/>
                 <Segment basic>
-                <Grid columns={2} relaxed='very'>
+                <Grid columns={2}>
                   <Grid.Column>
                   <DateField name='startDate'/>          
                   </Grid.Column>
