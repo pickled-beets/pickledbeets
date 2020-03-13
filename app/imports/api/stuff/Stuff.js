@@ -34,6 +34,8 @@ let add = function (data) {
     `DTEND;VALUE=DATE:20201130`,
     `GEO:40.0095;105.2669`,
     `SUMMARY:${title}`,
+    `DESCRIPTION:${description}`,
+    `LOCATION:${location}`,
     `UID:4088E990AD89CB3DBB484909`,
     `END:VEVENT`,
     `END:VCALENDAR`
@@ -47,11 +49,13 @@ let add = function (data) {
 
 /** Allows the file to be downloaded */
 let download = function(file) {
-  const blob = new Blob([file], {type: 'text/plain:charset=utf-8'})
+  const blob = new Blob([file], {type: 'text/plain:charset=utf-8'});
   fs.saveAs(blob, 'event.ics');
 }
 
+let dateFormatter = function () {
 
+}
 
 /** Attach this schema to the collection. */
 Stuffs.attachSchema(StuffSchema);
