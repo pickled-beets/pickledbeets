@@ -39,8 +39,8 @@ let add = function (data) {
     `NAME:${title}`,
     `BEGIN:VEVENT`,
     `DTSTAMP:20200228T232000Z`,
-    `DTSTART:${dateFormatter(startDate)}`,
-    `DTEND:${dateFormatter(endDate)}`,
+    `DTSTART:${dateFormatter(startDate, true)}`,
+    `DTEND:${dateFormatter(endDate, true)}`,
     `GEO:40.0095;105.2669`,
     `SUMMARY:${title}`,
     `DESCRIPTION:${description}`,
@@ -62,7 +62,7 @@ let download = function(file) {
   fs.saveAs(blob, 'event.ics');
 }
 
-let dateFormatter = function (date) {
+let dateFormatter = function (date, format) {
   // let options = {
   //   year: 'numeric', month: 'numeric', day: 'numeric',
   //   hour: 'numeric', minute: 'numeric', second: 'numeric',
@@ -70,7 +70,7 @@ let dateFormatter = function (date) {
   // };
   // options.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-  let d = date;
+  let d = new Date(date);
   if (d.getHours > 13) {
     d.setHours(d.getHours() - 14);
   } else {
@@ -78,9 +78,11 @@ let dateFormatter = function (date) {
   }
 
   // let formt = new Intl.DateTimeFormat('en-US', options).format(d)
-
-  // swal(`${regexFormat(d)}`)
-  return regexFormat(d);
+  if (format) {
+    return regexFormat(d);
+  } else {
+    return d
+  }
   
 }
 
@@ -122,4 +124,4 @@ let regexFormat = function (date) {
 Stuffs.attachSchema(StuffSchema);
 
 /** Make the collection and schema available to other code. */
-export { add, Stuffs, StuffSchema };
+export { add, dateFormatter, Stuffs, StuffSchema };

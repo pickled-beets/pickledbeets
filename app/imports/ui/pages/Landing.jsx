@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stuffs, add } from '/imports/api/stuff/Stuff';
+import { Stuffs, add, dateFormatter } from '/imports/api/stuff/Stuff';
 import { Grid, Header, Segment } from 'semantic-ui-react';
 import { 
   AutoForm, 
@@ -33,13 +33,21 @@ const formSchema = new SimpleSchema({
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
 
-  /** On submit, insert the data. */
+  /** 
+   * Bug to fix later: remove the seconds value from new Date() so that
+   * user can input the exact current time without having to worry about
+   * picking the exact seconds (which is not an input in the app)
+   * 
+   * On submit, insert the data. */
     submit(data, formRef) {
         if (data.startDate > data.endDate) {
-            swal('Error', "End date must be after Start date", 'error');
+          swal('Error', "End date must be after Start date", 'error');
+        } else if (dateFormatter(data.startDate, false) < new Date() ||
+         dateFormatter(data.endDate, false) < new Date()) { 
+          swal('Error', "Input dates must not be earlier than the current date", 'error')
         } else {
-            swal('Success', 'Your Calendar file will now be downloaded', 'success');
-            add(data);
+          swal('Success', 'Your Calendar file will now be downloaded', 'success');
+          add(data);
         }
   }
 
