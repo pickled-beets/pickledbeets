@@ -21,7 +21,14 @@ const StuffSchema = new SimpleSchema({
 let add = function (data) {
 
   const { title, description, location, startDate, endDate } = data;
-  // swal(`${dateFormatter(startDate)}`)
+  /**
+   * ==============================
+   * TO MAKE THE EVENT "ALL DAY"
+   * MUST IMPLEMENT AT WAY TO ADD
+   * ";VALUE=DATE" NEXT TO DTSTART:
+   * AND DTEND: 
+   * ==============================
+   */
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
     `CALSCALE:GREGORIAN`,
@@ -30,8 +37,8 @@ let add = function (data) {
     `NAME:${title}`,
     `BEGIN:VEVENT`,
     `DTSTAMP:20200228T232000Z`,
-    `DTSTART;VALUE=DATE:${dateFormatter(startDate)}`,
-    `DTEND;VALUE=DATE:${dateFormatter(endDate)}`,
+    `DTSTART:${dateFormatter(startDate)}`,
+    `DTEND:${dateFormatter(endDate)}`,
     `GEO:40.0095;105.2669`,
     `SUMMARY:${title}`,
     `DESCRIPTION:${description}`,
