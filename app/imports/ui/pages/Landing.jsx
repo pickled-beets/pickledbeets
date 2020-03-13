@@ -34,8 +34,13 @@ const formSchema = new SimpleSchema({
 class Landing extends React.Component {
 
   /** On submit, insert the data. */
-  submit(data, formRef) {
-    add(data);
+    submit(data, formRef) {
+        if (data.startDate > data.endDate) {
+            swal('Error', "End date must be after Start date", 'error');
+        } else {
+            swal('Success', 'Your Calendar file will now be downloaded', 'success');
+            add(data);
+        }
   }
 
   render() {

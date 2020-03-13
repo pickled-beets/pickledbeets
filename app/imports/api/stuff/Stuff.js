@@ -14,7 +14,9 @@ const StuffSchema = new SimpleSchema({
   description: String,
   location: String,
   startDate: Date,
-  endDate: Date,
+    endDate: {
+        type: Date,
+    },
 }, { tracker: Tracker });
 
 /** Takes in the data submitted then parses an iCalendar file to be downloaded */
