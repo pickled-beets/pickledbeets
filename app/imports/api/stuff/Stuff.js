@@ -21,7 +21,7 @@ const StuffSchema = new SimpleSchema({
 let add = function (data) {
 
   const { title, description, location, startDate, endDate } = data;
-  
+  swal(`${dateFormatter(startDate)}`)
   var iCalendarData = [
     `BEGIN:VCALENDAR`,
     `CALSCALE:GREGORIAN`,
@@ -53,8 +53,15 @@ let download = function(file) {
   fs.saveAs(blob, 'event.ics');
 }
 
-let dateFormatter = function () {
+let dateFormatter = function (str) {
+  let options = {
+    year: 'numeric', month: 'numeric', day: 'numeric',
+    hour: 'numeric', minute: 'numeric', second: 'numeric',
+    hour12: true, timeZone: 'Pacific/Honolulu'
+  };
+  options.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
+  return new Intl.DateTimeFormat('en-US', options).format(new Date(str))
 }
 
 /** Attach this schema to the collection. */
