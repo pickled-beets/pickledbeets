@@ -13,6 +13,8 @@ const StuffSchema = new SimpleSchema({
   title: String,
   description: String,
   location: String,
+  geolocation: String,
+  priority: String,
   startDate: Date,
     endDate: {
         type: Date,
@@ -22,7 +24,7 @@ const StuffSchema = new SimpleSchema({
 /** Takes in the data submitted then parses an iCalendar file to be downloaded */
 let add = function (data) {
 
-  const { title, description, location, startDate, endDate } = data;
+  const { title, description, location, geolocation, priority, startDate, endDate } = data;
   /**
    * ==============================
    * TO MAKE THE EVENT "ALL DAY"

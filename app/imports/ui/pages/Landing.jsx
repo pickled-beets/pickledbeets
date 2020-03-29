@@ -8,7 +8,8 @@ import {
   TextField,
   LongTextField,
   DateField,
-  AutoField
+  AutoField,
+  SelectField
 } from 'uniforms-semantic';
 import swal from 'sweetalert';
 // import { Meteor } from 'meteor/meteor';
@@ -26,6 +27,12 @@ const formSchema = new SimpleSchema({
     optional: true
   },
   location: String,
+  geolocation: String,
+  priority: {
+    type: String,
+    allowedValues: ['No Priority', 'Low Priority', 'High Priority'],
+    defaultValue: 'No Priority',
+  },
   startDate: Date,
   endDate: Date,
 });
@@ -64,6 +71,8 @@ class Landing extends React.Component {
                 <TextField name='title'/>
                 <LongTextField name='description'/>
                 <TextField name='location'/>
+                <TextField name='geolocation'/>
+                <SelectField name='priority'/>
                 <Segment basic>
                 <Grid columns={2}>
                   <Grid.Column>
