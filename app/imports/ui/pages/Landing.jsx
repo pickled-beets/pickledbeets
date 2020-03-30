@@ -8,7 +8,8 @@ import {
   TextField,
   LongTextField,
   DateField,
-  AutoField
+  AutoField,
+  Dropdown,
 } from 'uniforms-semantic';
 import swal from 'sweetalert';
 // import { Meteor } from 'meteor/meteor';
@@ -28,6 +29,7 @@ const formSchema = new SimpleSchema({
   location: String,
   startDate: Date,
   endDate: Date,
+  classification: String,
 });
 
 /** A simple static component to render some text for the landing page. */
@@ -53,6 +55,25 @@ class Landing extends React.Component {
 
   render() {
     let fRef = null;
+
+    const classOptions = [
+        {
+            key: 'PUBLIC',
+            text: 'PUBLIC',
+            value: 'PUBLIC',
+        },
+        {
+            key: 'PRIVATE',
+            text: 'PRIVATE',
+            value: 'PRIVATE',
+        },
+        {
+            key: 'CONFIDENTIAL',
+            text: 'CONFIDENTIAL',
+            value: 'CONFIDENTIAL',
+        },
+    ]
+
     return (
         <Grid verticalAlign='middle' textAlign='center' container>
 
@@ -74,6 +95,7 @@ class Landing extends React.Component {
                   </Grid.Column>
                 </Grid>
                 </Segment>
+                <TextField name='classification' />
                 <SubmitField value='Submit' name='Create'/>
                 <ErrorsField/>
               </Segment>

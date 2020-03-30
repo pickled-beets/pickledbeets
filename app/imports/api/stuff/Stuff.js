@@ -22,7 +22,7 @@ const StuffSchema = new SimpleSchema({
 /** Takes in the data submitted then parses an iCalendar file to be downloaded */
 let add = function (data) {
 
-  const { title, description, location, startDate, endDate } = data;
+  const { title, description, location, startDate, endDate, classification } = data;
   /**
    * ==============================
    * TO MAKE THE EVENT "ALL DAY"
@@ -45,6 +45,7 @@ let add = function (data) {
     `SUMMARY:${title}`,
     `DESCRIPTION:${description}`,
     `LOCATION:${location}`,
+    `CLASS:${classification}`,
     `UID:4088E990AD89CB3DBB484909`,
     `END:VEVENT`,
     `END:VCALENDAR`
