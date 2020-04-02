@@ -100,7 +100,7 @@ let dateFormatter = function (date, format) {
 
 /** Function for optional properties */
 let optProp = function (property, value, include) {
-    if (value === undefined) {
+    if (value === undefined || value === '') {
         if (include === true) {
             return `${property}:`;
         } else {
