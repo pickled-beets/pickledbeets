@@ -80,8 +80,18 @@ class Landing extends React.Component {
                             <LongTextField name='description' />
                             <TextField name='location' />
                             <TextField name='geolocation' />
-                            <SelectField name='priority' />
-                            <SelectField name='classification' />
+                            {/* <SelectField name='priority' />
+                            <SelectField name='classification' /> */}
+                            <Segment basic>
+                                <Grid columns={2}>
+                                    <Grid.Column textAlign='left'>
+                                        <SelectField checkboxes name='priority' />
+                                    </Grid.Column>
+                                    <Grid.Column textAlign='left'>
+                                        <SelectField checkboxes name='classification' />
+                                    </Grid.Column>
+                                </Grid>
+                            </Segment>
                             <Segment basic>
                                 <Grid columns={2}>
                                     <Grid.Column>

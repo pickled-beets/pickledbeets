@@ -25,12 +25,7 @@ const StuffSchema = new SimpleSchema({
 let add = function (data) {
 
     const { title, description, location, geolocation, priority, startDate, endDate, classification } = data;
-    let priorityInt = 0; //default priority of 0 = 'No priority'
-    if (priority == 'High Priority') {
-        priorityInt = 1;
-    } else if (priority == 'Low Priority') {
-        priorityInt = 9;
-    }
+    
     /**
      * ==============================
      * TO MAKE THE EVENT "ALL DAY"
@@ -53,7 +48,7 @@ let add = function (data) {
         `SUMMARY:${title}`,
         `DESCRIPTION:${description}`,
         `LOCATION:${location}`,
-        `PRIORITY:${priorityInt}`,
+        `PRIORITY:${setPriority(priority)}`,
         `CLASS:${classification.toUpperCase()}`,
         `UID:4088E990AD89CB3DBB484909`,
         `END:VEVENT`,
@@ -73,27 +68,28 @@ let download = function (file) {
 }
 
 let dateFormatter = function (date, format) {
-    // let options = {
-    //   year: 'numeric', month: 'numeric', day: 'numeric',
-    //   hour: 'numeric', minute: 'numeric', second: 'numeric',
-    //   hour12: true, timeZone: 'Pacific/Honolulu'
-    // };
-    // options.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-
     let d = new Date(date);
     if (d.getHours > 13) {
         d.setHours(d.getHours() - 14);
     } else {
         d.setHours(d.getHours() + 10);
     }
-
-    // let formt = new Intl.DateTimeFormat('en-US', options).format(d)
     if (format) {
         return regexFormat(d);
     } else {
         return d
     }
+}
 
+/**
+ * Returns a value based on the priority
+ */
+let setPriority = function (priority) {
+    if (priority === 'High Priority') {
+        return 1;
+    } else if (priority === 'Low Priority') {
+        return 9;
+    }
 }
 
 /** 
