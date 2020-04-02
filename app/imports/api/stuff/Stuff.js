@@ -4,9 +4,13 @@ import { Tracker } from 'meteor/tracker';
 import ICAL from 'ical.js'
 import swal from 'sweetalert'
 import fs from 'file-saver'
+import { getVTZ } from './Timezone'
 
 /** Define a Mongo collection to hold the data. */
 const Stuffs = new Mongo.Collection('Stuffs');
+
+/** Define the Timezones including DST */
+let timezones = getVTZ(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
 /** Define a schema to specify the structure of each document in the collection. */
 const StuffSchema = new SimpleSchema({
@@ -53,6 +57,21 @@ let add = function (data) {
         `PRODID:-//University of Hawaii at Manoa.//ICS 414//EN`,
         `VERSION:2.0`,
         `NAME:${title}`,
+        `BEGIN:VTIMEZONE`,
+        `TZID:${timezones[0].TYPE}`,
+        `BEGIN:STANDARD`,
+        `DTSTART:${timezones[0].DTSTART}`,
+        `TZOFFSETFROM:${timezones[0].TZOFFSETFROM}`,
+        `TZOFFSETTO:${timezones[0].TZOFFSETTO}`,
+        `TZNAME:${timezones[0].TZNAME}`,
+        `END:STANDARD`,
+        `BEGIN:DAYLIGHT`,
+        `DTSTART:${timezones[1].DTSTART}`,
+        `TZOFFSETFROM:${timezones[1].TZOFFSETFROM}`,
+        `TZOFFSETTO:${timezones[1].TZOFFSETTO}`,
+        `TZNAME:${timezones[1].TZNAME}`,
+        `END:DAYLIGHT`,
+        `END:VTIMEZONE`,
         `BEGIN:VEVENT`,
         `DTSTAMP:20200228T232000Z`,
         `DTSTART:${dateFormatter(startDate, true)}`,
@@ -70,6 +89,8 @@ let add = function (data) {
     ].filter(val => val !== 'undefined').join("\r\n");
 
     console.log(iCalendarData);
+    console.log(getVTZ(Intl.DateTimeFormat().resolvedOptions().timeZone));
+    console.log(timezones[0].BEGIN);
 
     var jcalData = ICAL.parse(iCalendarData);
     var vcalendar = new ICAL.Component(jcalData);
@@ -164,7 +185,6 @@ let regexFormat = function (date) {
     return [year, month, day, 'T', hours, minutes, seconds].join('');
 
 }
-
 
 /** Attach this schema to the collection. */
 Stuffs.attachSchema(StuffSchema);
