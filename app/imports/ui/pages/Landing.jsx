@@ -12,12 +12,12 @@ import {
     SelectField
 } from 'uniforms-semantic';
 import swal from 'sweetalert';
-// import { Meteor } from 'meteor/meteor';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import SimpleSchema from 'simpl-schema';
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css';
-import StartDateField from '../components/StartDate'
+// import { Meteor } from 'meteor/meteor';
+// import DatePicker from 'react-datepicker'
+// import 'react-datepicker/dist/react-datepicker.css';
+// import StartDateField from '../components/StartDate'
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -41,6 +41,14 @@ const formSchema = new SimpleSchema({
         allowedValues: ['Public', 'Private', 'Confidential'],
         defaultValue: 'Public',
     },
+    resources: {
+        type: String,
+        optional: true
+    },
+    rsvp: {
+        type: Boolean,
+        optional: true  
+    },
     startDate: Date,
     endDate: Date,
 });
@@ -48,12 +56,7 @@ const formSchema = new SimpleSchema({
 /** A simple static component to render some text for the landing page. */
 class Landing extends React.Component {
 
-    /** 
-     * Bug to fix later: remove the seconds value from new Date() so that
-     * user can input the exact current time without having to worry about
-     * picking the exact seconds (which is not an input in the app)
-     * 
-     * On submit, insert the data. */
+    /** On submit, insert the data. */
     submit(data, formRef) {
         if (data.startDate > data.endDate) {
             swal('Error', "End date must be after Start date", 'error');
@@ -102,6 +105,7 @@ class Landing extends React.Component {
                                     </Grid.Column>
                                 </Grid>
                             </Segment>
+                            <TextField placeholder="Equipment/Resources for the Event" name='resources' />
                             <SubmitField value='Submit' name='Create' />
                             <ErrorsField />
                         </Segment>

@@ -16,16 +16,29 @@ const StuffSchema = new SimpleSchema({
     geolocation: String,
     priority: String,
     startDate: Date,
-    endDate: {
-        type: Date,
-    },
+    endDate: Date,
 }, { tracker: Tracker });
 
 /** Takes in the data submitted then parses an iCalendar file to be downloaded */
 let add = function (data) {
 
-    const { title, description, location, geolocation, priority, startDate, endDate, classification } = data;
-    
+    const { 
+        title, 
+        description, 
+        location, 
+        geolocation, 
+        priority, 
+        startDate, 
+        endDate, 
+        classification,
+        resources,
+        rsvp
+    } = data;
+
+    console.log(resources);
+    console.log(rsvp);
+    console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
+
     /**
      * ==============================
      * TO MAKE THE EVENT "ALL DAY"
@@ -46,14 +59,17 @@ let add = function (data) {
         `DTEND:${dateFormatter(endDate, true)}`,
         `GEO:40.0095;105.2669`,
         `SUMMARY:${title}`,
-        `DESCRIPTION:${description}`,
+        `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
         `LOCATION:${location}`,
         `PRIORITY:${setPriority(priority)}`,
         `CLASS:${classification.toUpperCase()}`,
+        `${optProp(`RESOURCES`, resources, false)}`,                // resources is optional
         `UID:4088E990AD89CB3DBB484909`,
         `END:VEVENT`,
         `END:VCALENDAR`
-    ].join("\r\n");
+    ].filter(val => val !== 'undefined').join("\r\n");
+
+    console.log(iCalendarData);
 
     var jcalData = ICAL.parse(iCalendarData);
     var vcalendar = new ICAL.Component(jcalData);
@@ -67,6 +83,7 @@ let download = function (file) {
     fs.saveAs(blob, 'event.ics');
 }
 
+/** Formats the date into an acceptable ical date format */
 let dateFormatter = function (date, format) {
     let d = new Date(date);
     if (d.getHours > 13) {
@@ -81,14 +98,37 @@ let dateFormatter = function (date, format) {
     }
 }
 
-/**
- * Returns a value based on the priority
- */
+/** Function for optional properties */
+let optProp = function (property, value, include) {
+    if (value === undefined) {
+        if (include === true) {
+            return `${property}:`;
+        } else {
+            return undefined;
+        }
+    } else {
+        return `${property}:${value}`;
+    }
+}
+
+/** Returns a value based on the priority */
 let setPriority = function (priority) {
     if (priority === 'High Priority') {
         return 1;
     } else if (priority === 'Low Priority') {
         return 9;
+    }
+}
+
+/** 
+ * Splits string into commas
+ * NOTE: need to ask how resources actually are defined
+ */
+let splitResources = function (resources) {
+    if (resources === undefined) {
+        return undefined;
+    } else {
+        return resources.split(", ").join(",").toUpperCase();
     }
 }
 
