@@ -75,12 +75,16 @@ class Landing extends React.Component {
 
     /** On submit, insert the data. */
     submit(data, formRef) {
-        if (data.startDate > data.endDate) {
+        if (data.startDate.getTime() === data.endDate.getTime()) {
+            swal('Error', "Start date and End date must not be the same", 'error');
+        } else if (data.startDate.getTime() > data.endDate.getTime()) {
             swal('Error', "End date must be after Start date", 'error');
         } else if (dateFormatter(data.startDate, false) < new Date() ||
             dateFormatter(data.endDate, false) < new Date()) {
             swal('Error', "Input dates must not be earlier than the current date", 'error');
         } else {
+            console.log(data.startDate.getTime());
+            console.log(data.endDate.getTime());
             if (data.rsvp !== undefined && rsvpValidate(data.rsvp)) {
                 swal('Error', "invalid RSVP email", 'error')
             } else {
