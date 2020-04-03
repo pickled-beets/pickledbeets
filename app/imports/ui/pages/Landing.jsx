@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stuffs, add, dateFormatter } from '/imports/api/stuff/Stuff';
+import { Stuffs, add, dateFormatter, rsvpValidate } from '/imports/api/stuff/Stuff';
 import { Grid, Header, Segment } from 'semantic-ui-react';
 import {
     AutoForm,
@@ -79,10 +79,14 @@ class Landing extends React.Component {
             swal('Error', "End date must be after Start date", 'error');
         } else if (dateFormatter(data.startDate, false) < new Date() ||
             dateFormatter(data.endDate, false) < new Date()) {
-            swal('Error', "Input dates must not be earlier than the current date", 'error')
+            swal('Error', "Input dates must not be earlier than the current date", 'error');
         } else {
-            swal('Success', 'Your Calendar file will now be downloaded', 'success');
-            add(data);
+            if (data.rsvp !== undefined && rsvpValidate(data.rsvp)) {
+                swal('Error', "invalid RSVP email", 'error')
+            } else {
+                swal('Success', 'Your Calendar file will now be downloaded', 'success');
+                add(data);
+            }
         }
     }
 
@@ -125,7 +129,7 @@ class Landing extends React.Component {
                             <TextField placeholder="Equipment/Resources for the Event" name='resources' />
                             <ListField name='rsvp'>
                                 <ListItemField name='$'>
-                                    <NestField>
+                                    <NestField name=''>
                                         <Segment basic>
                                             <Grid columns={2}>
                                                 <Grid.Column>

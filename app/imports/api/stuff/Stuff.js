@@ -5,6 +5,7 @@ import ICAL from 'ical.js'
 import swal from 'sweetalert'
 import fs from 'file-saver'
 import { getVTZ } from './Timezone'
+import { object } from 'prop-types';
 
 /** Define a Mongo collection to hold the data. */
 const Stuffs = new Mongo.Collection('Stuffs');
@@ -41,6 +42,7 @@ let add = function (data) {
 
     console.log(resources);
     console.log(rsvp);
+    console.log(attendee(rsvp));
     console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
     /**
@@ -83,6 +85,7 @@ let add = function (data) {
         `PRIORITY:${setPriority(priority)}`,
         `CLASS:${classification.toUpperCase()}`,
         `${optProp(`RESOURCES`, resources, false)}`,                // resources is optional
+        `${attendee(rsvp)}`,
         `UID:4088E990AD89CB3DBB484909`,
         `END:VEVENT`,
         `END:VCALENDAR`
@@ -102,6 +105,23 @@ let add = function (data) {
 let download = function (file) {
     const blob = new Blob([file], { type: 'text/plain:charset=utf-8' });
     fs.saveAs(blob, 'event.ics');
+}
+
+/** Creates an attendee property if rsvp is used */
+let attendee = function (rsvp) {
+    if (rsvp === undefined || rsvp.length == 0) {
+        return undefined;
+    } else {
+        let str = '';
+        for (let i = 0; i < rsvp.length; i++) {
+            str += `ATTENDEE;RSVP=TRUE:mailto:${rsvp[i].email}`
+            if (i < rsvp.length - 1) {
+                str += '\n';
+            }
+        }
+        return str;
+    }
+
 }
 
 /** Formats the date into an acceptable ical date format */
@@ -143,7 +163,7 @@ let setPriority = function (priority) {
 
 /** 
  * Splits string into commas
- * NOTE: need to ask how resources actually are defined
+ * NOTE USED. Need to ask how resources actually are defined
  */
 let splitResources = function (resources) {
     if (resources === undefined) {
@@ -151,6 +171,29 @@ let splitResources = function (resources) {
     } else {
         return resources.split(", ").join(",").toUpperCase();
     }
+}
+
+/** 
+ * Email validator (returns true/false) 
+ * Taken from https://stackoverflow.com/questions/46155/
+ * how-to-validate-an-email-address-in-javascript
+ */
+let validateEmail = function (email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+/** 
+ * Checks if rsvp emails are valid 
+ * If email is not valid, it returns true
+ */
+let rsvpValidate = function (rsvp) {
+    for (let i = 0; i < rsvp.length; i++) {
+        if (!validateEmail(rsvp[i].email)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /** 
@@ -190,4 +233,4 @@ let regexFormat = function (date) {
 Stuffs.attachSchema(StuffSchema);
 
 /** Make the collection and schema available to other code. */
-export { add, dateFormatter, Stuffs, StuffSchema };
+export { add, dateFormatter, rsvpValidate, Stuffs, StuffSchema };
