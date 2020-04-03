@@ -86,7 +86,7 @@ let add = function (data) {
         `UID:4088E990AD89CB3DBB484909`,
         `END:VEVENT`,
         `END:VCALENDAR`
-    ].filter(val => val !== 'undefined').join("\r\n");
+    ].filter(val => val !== 'undefined').join("\r\n");              // might use splice(~31, 0, func) to add RSVP
 
     console.log(iCalendarData);
     console.log(getVTZ(Intl.DateTimeFormat().resolvedOptions().timeZone));

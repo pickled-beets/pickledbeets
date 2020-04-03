@@ -7,6 +7,11 @@ import {
     SubmitField,
     TextField,
     LongTextField,
+    ListField,
+    ListAddField,
+    ListDelField,
+    ListItemField,
+    NestField,
     DateField,
     AutoField,
     SelectField
@@ -46,8 +51,20 @@ const formSchema = new SimpleSchema({
         optional: true
     },
     rsvp: {
-        type: Boolean,
+        type: Array,
         optional: true  
+    },
+    'rsvp.$': {
+        type: Object,
+        optional: true  
+    },
+    'rsvp.$.name': {
+        type: String,
+        //optional: true  
+    },
+    'rsvp.$.email': {
+        type: String,
+        //optional: true  
     },
     startDate: Date,
     endDate: Date,
@@ -106,6 +123,23 @@ class Landing extends React.Component {
                                 </Grid>
                             </Segment>
                             <TextField placeholder="Equipment/Resources for the Event" name='resources' />
+                            <ListField name='rsvp'>
+                                <ListItemField name='$'>
+                                    <NestField>
+                                        <Segment basic>
+                                            <Grid columns={2}>
+                                                <Grid.Column>
+                                                    <TextField name='name' />
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <TextField name='email' />
+                                                </Grid.Column>
+                                            </Grid>
+                                        </Segment>
+                                        {/* <TextField name='email'/> */}
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
                             <SubmitField value='Submit' name='Create' />
                             <ErrorsField />
                         </Segment>
