@@ -20,6 +20,8 @@ const StuffSchema = new SimpleSchema({
     location: String,
     geolocation: String,
     priority: String,
+    repeat: String,
+    repeatCount: Number,
     startDate: Date,
     endDate: Date,
 }, { tracker: Tracker });
@@ -32,7 +34,9 @@ let add = function (data) {
         description, 
         location, 
         geolocation, 
-        priority, 
+        priority,
+        repeat,
+        repeatCount,
         startDate, 
         endDate, 
         classification,
@@ -78,6 +82,7 @@ let add = function (data) {
         `DTSTAMP:20200228T232000Z`,
         `DTSTART:${dateFormatter(startDate, true)}`,
         `DTEND:${dateFormatter(endDate, true)}`,
+        `RRULE:FREQ=${setRepeat(repeat)};COUNT=${repeatCount.toString()}`,
         `GEO:40.0095;105.2669`,
         `SUMMARY:${title}`,
         `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
@@ -159,6 +164,11 @@ let setPriority = function (priority) {
     } else if (priority === 'Low Priority') {
         return 9;
     }
+}
+
+/** Returns null if repat is never */
+let setRepeat = function (repeat) {
+    return repeat;
 }
 
 /** 

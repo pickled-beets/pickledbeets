@@ -14,7 +14,8 @@ import {
     NestField,
     DateField,
     AutoField,
-    SelectField
+    SelectField,
+    NumField
 } from 'uniforms-semantic';
 import swal from 'sweetalert';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
@@ -45,6 +46,15 @@ const formSchema = new SimpleSchema({
         type: String,
         allowedValues: ['Public', 'Private', 'Confidential'],
         defaultValue: 'Public',
+    },
+    repeat: {
+      type: String,
+      allowedValues: ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'],
+      defaultValue: 'DAILY',
+    },
+    repeatCount: {
+      type: Number,
+      defaultValue: 1,
     },
     resources: {
         type: String,
@@ -130,6 +140,19 @@ class Landing extends React.Component {
                                     </Grid.Column>
                                 </Grid>
                             </Segment>
+                          <Segment basic>
+                            <Grid columns={2}>
+                              <Grid.Column>
+                                <SelectField checkboxes name='repeat' />
+                              </Grid.Column>
+                              <Grid.Column>
+                                <NumField name='repeatCount'
+                                          decimal={false}
+                                          min={1}
+                                />
+                              </Grid.Column>
+                            </Grid>
+                          </Segment>
                             <TextField placeholder="Equipment/Resources for the Event" name='resources' />
                             <ListField name='rsvp'>
                                 <ListItemField name='$'>
