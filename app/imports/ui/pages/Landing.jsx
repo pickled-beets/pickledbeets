@@ -49,8 +49,8 @@ const formSchema = new SimpleSchema({
     },
     repeat: {
       type: String,
-      allowedValues: ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'],
-      defaultValue: 'DAILY',
+      allowedValues: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
+      defaultValue: 'Daily',
     },
     repeatCount: {
       type: Number,

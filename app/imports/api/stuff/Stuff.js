@@ -82,7 +82,7 @@ let add = function (data) {
         `DTSTAMP:20200228T232000Z`,
         `DTSTART:${dateFormatter(startDate, true)}`,
         `DTEND:${dateFormatter(endDate, true)}`,
-        `RRULE:FREQ=${setRepeat(repeat)};COUNT=${repeatCount.toString()}`,
+        `RRULE:FREQ=${repeat.toUpperCase()};COUNT=${repeatCount.toString()}`,
         `GEO:40.0095;105.2669`,
         `SUMMARY:${title}`,
         `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
@@ -164,11 +164,6 @@ let setPriority = function (priority) {
     } else if (priority === 'Low Priority') {
         return 9;
     }
-}
-
-/** Returns null if repat is never */
-let setRepeat = function (repeat) {
-    return repeat;
 }
 
 /** 
