@@ -20,8 +20,8 @@ const StuffSchema = new SimpleSchema({
     location: String,
     geolocation: String,
     priority: String,
-    repeat: String,
-    repeatCount: Number,
+    //repeat: String,
+    //repeatCount: Number,
     startDate: Date,
     endDate: Date,
 }, { tracker: Tracker });
@@ -48,6 +48,7 @@ let add = function (data) {
     console.log(rsvp);
     console.log(attendee(rsvp));
     console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
+    //console.log(repeat[0].count);
 
     /**
      * ==============================
@@ -82,7 +83,8 @@ let add = function (data) {
         `DTSTAMP:20200228T232000Z`,
         `DTSTART:${dateFormatter(startDate, true)}`,
         `DTEND:${dateFormatter(endDate, true)}`,
-        `RRULE:FREQ=${repeat.toUpperCase()};COUNT=${repeatCount.toString()}`,
+        // `RRULE:FREQ=${repeat.toUpperCase()};COUNT=${repeatCount.toString()}`,
+        `${recurrence(repeat)}`,
         `GEO:40.0095;105.2669`,
         `SUMMARY:${title}`,
         `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
@@ -157,6 +159,20 @@ let optProp = function (property, value, include) {
     }
 }
 
+/** Returns the recurrence string */
+let recurrence = function (repeat) {
+    if (repeat === undefined || repeat.length == 0) {
+        return undefined;
+    } else {
+        let str = `RRULE:FREQ=${repeat[0].frequency.toUpperCase()}`;
+        if (repeat[0].count !== undefined && repeat[0].count !== 0) {
+            str += `;COUNT=${repeat[0].count.toString()}`;
+        }
+        
+        return str;
+    }
+}
+
 /** Returns a value based on the priority */
 let setPriority = function (priority) {
     if (priority === 'High Priority') {
@@ -168,7 +184,7 @@ let setPriority = function (priority) {
 
 /** 
  * Splits string into commas
- * NOTE USED. Need to ask how resources actually are defined
+ * NOT USED. Need to ask how resources actually are defined
  */
 let splitResources = function (resources) {
     if (resources === undefined) {

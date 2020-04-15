@@ -47,15 +47,39 @@ const formSchema = new SimpleSchema({
         allowedValues: ['Public', 'Private', 'Confidential'],
         defaultValue: 'Public',
     },
+    // repeat: {
+    //   type: String,
+    //   allowedValues: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
+    //   defaultValue: 'Daily',
+    // },
+    // repeatCount: {
+    //   type: Number,
+    //   defaultValue: 1,
+    // },
+
     repeat: {
-      type: String,
-      allowedValues: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
-      defaultValue: 'Daily',
+        type: Array,
+        maxCount: 1,
+        optional: true
     },
-    repeatCount: {
-      type: Number,
-      defaultValue: 1,
+
+    'repeat.$': {
+        type: Object,
+        optional: true
     },
+
+    'repeat.$.frequency': {
+        type: String,
+        allowedValues: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
+        defaultValue: 'Daily',
+    },
+
+    'repeat.$.count': {
+        type: Number,
+        defaultValue: 0,
+        optional: true
+    },
+
     resources: {
         type: String,
         optional: true
@@ -116,6 +140,7 @@ class Landing extends React.Component {
                         <Segment>
                             <TextField name='title' />
                             <LongTextField name='description' />
+                            <TextField placeholder="Equipment/Resources for the Event" name='resources' />
                             <TextField name='location' />
                             <TextField name='geolocation' />
                             {/* <SelectField name='priority' />
@@ -140,7 +165,7 @@ class Landing extends React.Component {
                                     </Grid.Column>
                                 </Grid>
                             </Segment>
-                          <Segment basic>
+                          {/* <Segment basic>
                             <Grid columns={2}>
                               <Grid.Column>
                                 <SelectField checkboxes name='repeat' />
@@ -152,8 +177,24 @@ class Landing extends React.Component {
                                 />
                               </Grid.Column>
                             </Grid>
-                          </Segment>
-                            <TextField placeholder="Equipment/Resources for the Event" name='resources' />
+                          </Segment> */}
+                            <ListField name='repeat'>
+                                <ListItemField name='$'>
+                                    <NestField name=''>
+                                        <Segment basic>
+                                            <Grid columns={2}>
+                                                <Grid.Column textAlign='left'>
+                                                    <SelectField checkboxes name='frequency' />
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <NumField name='count' decimal={false} min={1}/>
+                                                </Grid.Column>
+                                            </Grid>
+                                        </Segment>
+                                        {/* <TextField name='email'/> */}
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
                             <ListField name='rsvp'>
                                 <ListItemField name='$'>
                                     <NestField name=''>
