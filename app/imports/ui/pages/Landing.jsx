@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stuffs, add, dateFormatter, rsvpValidate } from '/imports/api/stuff/Stuff';
+import { Stuffs, add, dateFormatter, rsvpValidate, validateGeoloc } from '/imports/api/stuff/Stuff';
 import { Grid, Header, Segment } from 'semantic-ui-react';
 import {
     AutoForm,
@@ -121,6 +121,8 @@ class Landing extends React.Component {
             console.log(data.endDate.getTime());
             if (data.rsvp !== undefined && rsvpValidate(data.rsvp)) {
                 swal('Error', "invalid RSVP email", 'error')
+            } else if (data.geolocation !== undefined && !validateGeoloc(data.geolocation)) {
+                swal('Error', "invalid geolocation coordinates", 'error')
             } else {
                 swal('Success', 'Your Calendar file will now be downloaded', 'success');
                 add(data);

@@ -36,7 +36,7 @@ let add = function (data) {
         geolocation, 
         priority,
         repeat,
-        repeatCount,
+        // repeatCount,
         startDate, 
         endDate, 
         classification,
@@ -85,7 +85,7 @@ let add = function (data) {
         `DTEND:${dateFormatter(endDate, true)}`,
         // `RRULE:FREQ=${repeat.toUpperCase()};COUNT=${repeatCount.toString()}`,
         `${recurrence(repeat)}`,
-        `GEO:40.0095;105.2669`,
+        `GEO:${geolocation.replace(/,\s*/, ';')}`,
         `SUMMARY:${title}`,
         `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
         `LOCATION:${location}`,
@@ -200,8 +200,18 @@ let splitResources = function (resources) {
  * how-to-validate-an-email-address-in-javascript
  */
 let validateEmail = function (email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+}
+
+/**
+ * Geolocation validator (returns true/false)
+ * Taken from https://stackoverflow.com/questions/3518504/
+ * regular-expression-for-matching-latitude-longitude-coordinates
+ */
+let validateGeoloc = function (geolocation) {
+    let re = /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/;
+    return re.test(geolocation);
 }
 
 /** 
@@ -254,4 +264,4 @@ let regexFormat = function (date) {
 Stuffs.attachSchema(StuffSchema);
 
 /** Make the collection and schema available to other code. */
-export { add, dateFormatter, rsvpValidate, Stuffs, StuffSchema };
+export { add, dateFormatter, rsvpValidate, Stuffs, StuffSchema, validateGeoloc };
