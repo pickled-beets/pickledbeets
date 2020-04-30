@@ -144,7 +144,7 @@ class Landing extends React.Component {
                             <LongTextField name='description' />
                             <TextField placeholder="Equipment/Resources for the Event" name='resources' />
                             <TextField name='location' />
-                            <TextField name='geolocation' />
+                            <TextField placeholder="ex: 40.689, -74.045" name='geolocation' />
                             {/* <SelectField name='priority' />
                             <SelectField name='classification' /> */}
                             <Segment basic>
