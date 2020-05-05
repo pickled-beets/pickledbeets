@@ -20,10 +20,9 @@ import {
 import swal from 'sweetalert';
 import 'uniforms-bridge-simple-schema-2'; // required for Uniforms
 import SimpleSchema from 'simpl-schema';
-// import { Meteor } from 'meteor/meteor';
-// import DatePicker from 'react-datepicker'
-// import 'react-datepicker/dist/react-datepicker.css';
-// import StartDateField from '../components/StartDate'
+import moment from 'moment';
+
+let tzvalues = moment.tz.names();
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -47,15 +46,6 @@ const formSchema = new SimpleSchema({
         allowedValues: ['Public', 'Private', 'Confidential'],
         defaultValue: 'Public',
     },
-    // repeat: {
-    //   type: String,
-    //   allowedValues: ['Daily', 'Weekly', 'Monthly', 'Yearly'],
-    //   defaultValue: 'Daily',
-    // },
-    // repeatCount: {
-    //   type: Number,
-    //   defaultValue: 1,
-    // },
 
     repeat: {
         type: Array,
@@ -99,6 +89,19 @@ const formSchema = new SimpleSchema({
     'rsvp.$.email': {
         type: String,
         //optional: true  
+    },
+    timezone: {
+        type: Array,
+        maxCount: 1,
+        optional: true
+    },
+    'timezone.$': {
+        type: Object
+    },
+    'timezone.$.id': {
+        type: String,
+        allowedValues: tzvalues,
+        defaultValue: Intl.DateTimeFormat().resolvedOptions().timeZone
     },
     startDate: Date,
     endDate: Date,
@@ -167,19 +170,20 @@ class Landing extends React.Component {
                                     </Grid.Column>
                                 </Grid>
                             </Segment>
-                          {/* <Segment basic>
-                            <Grid columns={2}>
-                              <Grid.Column>
-                                <SelectField checkboxes name='repeat' />
-                              </Grid.Column>
-                              <Grid.Column>
-                                <NumField name='repeatCount'
-                                          decimal={false}
-                                          min={1}
-                                />
-                              </Grid.Column>
-                            </Grid>
-                          </Segment> */}
+                            <ListField name='timezone'>
+                                <ListItemField name='$'>
+                                    <NestField name=''>
+                                        <Segment basic>
+                                            <Grid columns={1}>
+                                                <Grid.Column>
+                                                    <SelectField name='id' />
+                                                </Grid.Column>
+                                            </Grid>
+                                        </Segment>
+                                        {/* <TextField name='email'/> */}
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
                             <ListField name='repeat'>
                                 <ListItemField name='$'>
                                     <NestField name=''>

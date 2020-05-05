@@ -41,23 +41,20 @@ let add = function (data) {
         endDate, 
         classification,
         resources,
-        rsvp
+        rsvp,
+        timezone
     } = data;
 
     console.log(resources);
     console.log(rsvp);
     console.log(attendee(rsvp));
     console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
-    //console.log(repeat[0].count);
+    console.log(timezone);
 
-    /**
-     * ==============================
-     * TO MAKE THE EVENT "ALL DAY"
-     * MUST IMPLEMENT AT WAY TO ADD
-     * ";VALUE=DATE" NEXT TO DTSTART:
-     * AND DTEND: 
-     * ==============================
-     */
+    if (timezone && timezone.length) {
+        timezones = getVTZ(timezone[0].id);
+    }
+
     var iCalendarData = [
         `BEGIN:VCALENDAR`,
         `CALSCALE:GREGORIAN`,
@@ -83,7 +80,6 @@ let add = function (data) {
         `DTSTAMP:20200228T232000Z`,
         `DTSTART:${dateFormatter(startDate, true)}`,
         `DTEND:${dateFormatter(endDate, true)}`,
-        // `RRULE:FREQ=${repeat.toUpperCase()};COUNT=${repeatCount.toString()}`,
         `${recurrence(repeat)}`,
         `GEO:${geolocation.replace(/,\s*/, ';')}`,
         `SUMMARY:${title}`,
@@ -130,6 +126,15 @@ let attendee = function (rsvp) {
     }
 
 }
+
+// /** Allows custom timzones */
+// let customTZ = function (timezone) {
+//     if (timezone === undefined || timezone.length == 0) {
+//         return '';
+//     } else {
+//         return `;TZID=${timezone[0].id}`
+//     }
+// }
 
 /** Formats the date into an acceptable ical date format */
 let dateFormatter = function (date, format) {
