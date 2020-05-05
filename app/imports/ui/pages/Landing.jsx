@@ -23,6 +23,8 @@ import SimpleSchema from 'simpl-schema';
 import moment from 'moment';
 
 let tzvalues = moment.tz.names();
+let re = /[A-Z][a-z]+\/[A-Z][a-z]+/;
+let acceptedvalues = tzvalues.filter((input) => {return input.match(re)})
 
 /** Create a schema to specify the structure of the data to appear in the form. */
 const formSchema = new SimpleSchema({
@@ -100,7 +102,7 @@ const formSchema = new SimpleSchema({
     },
     'timezone.$.id': {
         type: String,
-        allowedValues: tzvalues,
+        allowedValues: acceptedvalues,
         defaultValue: Intl.DateTimeFormat().resolvedOptions().timeZone
     },
     startDate: Date,
