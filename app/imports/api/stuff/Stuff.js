@@ -79,7 +79,7 @@ let add = function (data) {
         `DTEND:${dateFormatter(endDate, true)}`,
         `${recurrence(repeat)}`,
         `${recurrenceExcept(repeatExcept)}`,
-        `GEO:${printGeo(geolocation)}`,
+        `${printGeo(geolocation)}`,
         `SUMMARY:${title}`,
         `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
         `LOCATION:${location}`,
@@ -247,9 +247,9 @@ let validateGeoloc = function (geolocation) {
  */
 let printGeo = function (geolocation) {
     if (geolocation) {
-        geolocation.replace(/,\s*/, ';')
+        return `GEO:${geolocation.replace(/,\s*/, ';')}`
     } else {
-        return '';
+        return undefined;
     }
 }
 
