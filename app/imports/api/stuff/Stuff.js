@@ -51,9 +51,14 @@ let add = function (data) {
     console.log(attendee(rsvp));
     console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
     console.log(timezone);
+    console.log(geolocation);
 
     if (timezone && timezone.length) {
         timezones = getVTZ(timezone[0].id);
+    }
+
+    if (!timezones[1]) {
+        timezones[1] = timezones[0];
     }
 
     var iCalendarData = [
@@ -83,7 +88,7 @@ let add = function (data) {
         `DTEND:${dateFormatter(endDate, true)}`,
         `${recurrence(repeat)}`,
         `${recurrenceExcept(repeatExcept)}`,
-        `GEO:${geolocation.replace(/,\s*/, ';')}`,
+        `GEO:${printGeo(geolocation)}`,
         `SUMMARY:${title}`,
         `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
         `LOCATION:${location}`,
@@ -228,6 +233,14 @@ let validateEmail = function (email) {
 let validateGeoloc = function (geolocation) {
     let re = /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/;
     return re.test(geolocation);
+}
+
+let printGeo = function (geolocation) {
+    if (geolocation) {
+        geolocation.replace(/,\s*/, ';')
+    } else {
+        return '';
+    }
 }
 
 /** 
