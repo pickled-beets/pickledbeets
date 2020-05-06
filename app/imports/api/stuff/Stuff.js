@@ -56,10 +56,6 @@ let add = function (data) {
         timezones = getVTZ(timezone[0].id);
     }
 
-    if (!timezones[1]) {
-        timezones[1] = timezones[0];
-    }
-
     var iCalendarData = [
         `BEGIN:VCALENDAR`,
         `CALSCALE:GREGORIAN`,
@@ -71,15 +67,10 @@ let add = function (data) {
         `BEGIN:STANDARD`,
         `DTSTART:${timezones[0].DTSTART}`,
         `TZOFFSETFROM:${timezones[0].TZOFFSETFROM}`,
-        `TZOFFSETTO:${timezones[0].TZOFFSETTO}`,
+        `${offsetto(timezones)}`,
         `TZNAME:${timezones[0].TZNAME}`,
         `END:STANDARD`,
-        `BEGIN:DAYLIGHT`,
-        `DTSTART:${timezones[1].DTSTART}`,
-        `TZOFFSETFROM:${timezones[1].TZOFFSETFROM}`,
-        `TZOFFSETTO:${timezones[1].TZOFFSETTO}`,
-        `TZNAME:${timezones[1].TZNAME}`,
-        `END:DAYLIGHT`,
+        `${validDaylight(timezones)}`,
         `END:VTIMEZONE`,
         `BEGIN:VEVENT`,
         `DTSTAMP:20200228T232000Z`,
@@ -131,15 +122,6 @@ let attendee = function (rsvp) {
     }
 
 }
-
-// /** Allows custom timzones */
-// let customTZ = function (timezone) {
-//     if (timezone === undefined || timezone.length == 0) {
-//         return '';
-//     } else {
-//         return `;TZID=${timezone[0].id}`
-//     }
-// }
 
 /** Formats the date into an acceptable ical date format */
 let dateFormatter = function (date, format) {
@@ -215,6 +197,31 @@ let validateEmail = function (email) {
 }
 
 /**
+ * Checks for daylight savings
+ */
+let validDaylight = function (timezones) {
+    if (timezones[1]) {
+        let str = `BEGIN:DAYLIGHT,\nDTSTART:${timezones[1].DTSTART},\nTZOFFSETFROM:${timezones[1].TZOFFSETFROM},\n`
+        let str2 = `TZOFFSETTO:${timezones[1].TZOFFSETTO},\nTZNAME:${timezones[1].TZNAME},\nEND:DAYLIGHT`
+        str += str2;
+        return str;
+    } else {
+        return undefined;
+    }
+}
+
+/**
+ * Removes the offsetto for timzones without DST
+ */
+let offsetto = function (timezones) {
+    if (timezones[0].TZOFFSETTO === 'Invalid date') {
+        return `TZOFFSETTO:${timezones[0].TZOFFSETFROM}`
+    } else {
+        return `TZOFFSETTO:${timezones[0].TZOFFSETTO}`
+    }
+}
+
+/**
  * Geolocation validator (returns true/false)
  * Taken from https://stackoverflow.com/questions/3518504/
  * regular-expression-for-matching-latitude-longitude-coordinates
@@ -224,6 +231,9 @@ let validateGeoloc = function (geolocation) {
     return re.test(geolocation);
 }
 
+/**
+ * Makes sure that '' are okay because geolocation is optional 
+ */
 let printGeo = function (geolocation) {
     if (geolocation) {
         geolocation.replace(/,\s*/, ';')
