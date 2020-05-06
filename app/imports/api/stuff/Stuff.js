@@ -36,6 +36,7 @@ let add = function (data) {
         geolocation, 
         priority,
         repeat,
+        repeatExcept,
         // repeatCount,
         startDate, 
         endDate, 
@@ -81,6 +82,7 @@ let add = function (data) {
         `DTSTART:${dateFormatter(startDate, true)}`,
         `DTEND:${dateFormatter(endDate, true)}`,
         `${recurrence(repeat)}`,
+        `${recurrenceExcept(repeatExcept)}`,
         `GEO:${geolocation.replace(/,\s*/, ';')}`,
         `SUMMARY:${title}`,
         `${optProp(`DESCRIPTION`, description, true)}`,             // description is optional
@@ -174,6 +176,15 @@ let recurrence = function (repeat) {
             str += `;COUNT=${repeat[0].count.toString()}`;
         }
         
+        return str;
+    }
+}
+
+let recurrenceExcept = function (repeatExcept) {
+    if (repeatExcept === undefined || repeatExcept.length == 0) {
+        return undefined;
+    } else {
+        let str = `EXRULE:FREQ=WEEKLY;BYDAY=${repeatExcept[0].byDay}`;
         return str;
     }
 }

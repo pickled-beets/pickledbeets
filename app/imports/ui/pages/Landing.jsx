@@ -70,6 +70,21 @@ const formSchema = new SimpleSchema({
         optional: true
     },
 
+    repeatExcept: {
+        type: Array,
+        maxCount: 1,
+        optional: true
+    },
+    'repeatExcept.$': {
+        type: Object,
+        optional: true
+    },  
+    'repeatExcept.$.byDay': {
+        type: String,
+        allowedValues: ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'],
+        optional: true
+    },
+
     resources: {
         type: String,
         optional: true
@@ -198,6 +213,19 @@ class Landing extends React.Component {
                                             </Grid>
                                         </Segment>
                                         {/* <TextField name='email'/> */}
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
+                            <ListField name = 'repeatExcept'>
+                                <ListItemField name='$'>
+                                    <NestField name=''>
+                                          <Segment basic>
+                                              <Grid columns={2}>
+                                                   <Grid.Column textAlign='left'>
+                                                        <SelectField checkboxes name='byDay' />
+                                                   </Grid.Column>
+                                              </Grid>
+                                          </Segment>
                                     </NestField>
                                 </ListItemField>
                             </ListField>
